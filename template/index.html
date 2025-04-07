@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        select, textarea, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        textarea {
+            width: 300px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h2>AI Language Translator</h2>
+    <label for="sourceLang">From:</label>
+    <select id="sourceLang">
+        <option value="en">English</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="de">German</option>
+        <option value="tl">tagalog</option>
+        <option value="zh">Chinese</option>
+        <option value="hi">hindi</option>
+    </select>
+
+    <label for="targetLang">To:</label>
+    <select id="targetLang">
+        <option value="fr">French</option>
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="de">German</option>
+        <option value="tl">tagalog</option>
+        <option value="zh">Chinese</option>
+        <option value="hi">hindi</option>
+    </select>
+
+    <br><br>
+    <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+    <br>
+    <button onclick="translateText()">Translate</button>
+    <h3>Translation:</h3>
+    <p id="outputText"></p>
+
+    <script>
+        async function translateText() {
+            const text = document.getElementById("inputText").value;
+            const sourceLang = document.getElementById("sourceLang").value;
+            const targetLang = document.getElementById("targetLang").value;
+
+            const response = await fetch("http://127.0.0.1:5000/translate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, source_lang: sourceLang, target_lang: targetLang })
+            });
+
+            const data = await response.json();
+            document.getElementById("outputText").innerText = data.translated_text || "Error: " + data.error;
+        }
+    </script>
+</body>
+</html>
